@@ -1,0 +1,3 @@
+fpstimer
+opencv-python
+Pillow
