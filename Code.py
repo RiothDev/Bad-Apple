@@ -1,4 +1,4 @@
-import os, cv2, fpstimer, sys
+import os, cv2, fpstimer, sys, screeninfo, math
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame
 from PIL import Image
@@ -12,7 +12,6 @@ class sizes:
         self.Height = int(height)
 
 frameCount = 1
-frameSize = 180
 
 cap = None
 
@@ -24,6 +23,17 @@ def main():
     sys.stdout.write("--------------\n")
 
     input()
+
+    def getSize():
+        sizes = [m for m in screeninfo.get_monitors()]
+        monitor = 1
+
+        if len(sizes) > 1:
+            monitor = input("> Monitor (1 - {}) : ".format(len(sizes)))
+        
+        return sizes[(int(monitor) - 1)]
+    
+    monitorSizes = getSize()
 
     def loadMusic(song):
         pygame.mixer.init()
@@ -39,7 +49,14 @@ def main():
         loadMusic("Song.mp3")
 
         for frame in range(0, totalFrames):
-            sys.stdout.write("\r" + asciiImages[frame])
+            try:
+                #sys.stdout.write("\n\n\n\n")
+                sys.stdout.write("\r" + asciiImages[frame])
+                sys.stdout.flush()
+
+            except Exception as error:
+                print(error)
+
             timer.sleep()
     
     def loadFrames(totalFrames):
@@ -84,9 +101,11 @@ def main():
 
         oldWidth, oldHeight = img.size
         oldSizes = sizes(oldWidth, oldHeight)
+
         ratio = (oldSizes.Height / float(oldSizes.Width * 2.5))
 
-        newSizes = sizes(frameSize, (ratio * frameSize))
+        newSizes = sizes(math.floor(monitorSizes.y / 2), math.floor((ratio * float(monitorSizes.height / 5.5))))
+        #print(math.floor((ratio * float(monitorSizes.height / 5.6))))
 
         img = img.resize((newSizes.Width, newSizes.Height))
         img = img.convert("L")
@@ -97,8 +116,8 @@ def main():
         newPixels = "".join(newPixels)
         pixelsLen = len(newPixels)
 
-        asciiImage = [newPixels[index:index + newSizes.Width] for index in range(0, pixelsLen, newSizes.Width)]
-        asciiImage = "\n".join(asciiImage)
+        asciiImage = [newPixels[index:(index + newSizes.Width)] for index in range(0, pixelsLen, newSizes.Width)]
+        asciiImage = "\n".join(x for x in asciiImage)
 
         return asciiImage
     
