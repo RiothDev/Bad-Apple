@@ -22,8 +22,6 @@ def main():
     sys.stdout.write("Start\n")
     sys.stdout.write("--------------\n")
 
-    input()
-
     def getSize():
         sizes = [m for m in screeninfo.get_monitors()]
         monitor = 1
@@ -31,9 +29,14 @@ def main():
         if len(sizes) > 1:
             monitor = input("> Monitor (1 - {}) : ".format(len(sizes)))
         
-        return sizes[(int(monitor) - 1)]
+        return sizes[(int(monitor) - 1)].height, sizes[(int(monitor) - 1)].width
     
-    monitorSizes = getSize()
+    askSize = input("> Use screen sizes? (Y / N) : ")
+
+    if askSize.lower() == "y":
+        monitorHeight, monitorWidth = getSize()
+    else:
+        monitorHeight, monitorWidth = int(input("> Height (190) : ")), int(input("> Width (160) : "))
 
     def loadMusic(song):
         pygame.mixer.init()
@@ -104,7 +107,7 @@ def main():
 
         ratio = (oldSizes.Height / float(oldSizes.Width * 2.5))
 
-        newSizes = sizes(math.floor(monitorSizes.y / 2), math.floor((ratio * float(monitorSizes.height / 5.5))))
+        newSizes = sizes(monitorWidth / 2, math.floor((ratio * float(monitorHeight / 5.5))))
         #print(math.floor((ratio * float(monitorSizes.height / 5.6))))
 
         img = img.resize((newSizes.Width, newSizes.Height))
