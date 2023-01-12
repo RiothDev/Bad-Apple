@@ -29,7 +29,7 @@ def main():
         if len(sizes) > 1:
             monitor = input("> Monitor (1 - {}) : ".format(len(sizes)))
         
-        return math.floor(sizes[(int(monitor) - 1)].height / 5.5), math.floor(sizes[(int(monitor) - 1)].width / 2)
+        return math.floor(sizes[(int(monitor) - 1)].height / 5.5), math.floor(sizes[(int(monitor) - 1)].width / 10)
     
     askSize = input("> Use screen sizes? (Y / N) : ")
 
