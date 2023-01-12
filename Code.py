@@ -29,7 +29,7 @@ def main():
         if len(sizes) > 1:
             monitor = input("> Monitor (1 - {}) : ".format(len(sizes)))
         
-        return sizes[(int(monitor) - 1)].height, sizes[(int(monitor) - 1)].width
+        return math.floor(sizes[(int(monitor) - 1)].height / 5.5), math.floor(sizes[(int(monitor) - 1)].width / 2)
     
     askSize = input("> Use screen sizes? (Y / N) : ")
 
@@ -107,7 +107,7 @@ def main():
 
         ratio = (oldSizes.Height / float(oldSizes.Width * 2.5))
 
-        newSizes = sizes(monitorWidth / 2, math.floor((ratio * float(monitorHeight / 5.5))))
+        newSizes = sizes(monitorWidth, math.floor((ratio * monitorHeight)))
         #print(math.floor((ratio * float(monitorSizes.height / 5.6))))
 
         img = img.resize((newSizes.Width, newSizes.Height))
