@@ -1,3 +1,5 @@
 fpstimer
 opencv-python
 Pillow
+screeninfo
+pygame --pre
