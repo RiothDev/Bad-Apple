@@ -1,4 +1,4 @@
-import os, cv2, fpstimer, sys, screeninfo, math
+import os, cv2, fpstimer, sys, screeninfo, math, sys, traceback
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame
 from PIL import Image
@@ -14,6 +14,13 @@ class sizes:
 frameCount = 1
 
 cap = None
+
+def showException(exc_type, exc_value, tb):
+    traceback.print_exc(exc_type, exc_value, tb)
+    input("")
+    sys.exit(-1)
+
+sys.excepthook = showException
 
 def main():
     os.system("title Bad apple")
@@ -48,13 +55,13 @@ def main():
         print("Starting...")
         os.system("cls")
 
-        timer = fpstimer.FPSTimer(30)
+        timer = fpstimer.FPSTimer(10)
         loadMusic("Song.mp3")
 
         for frame in range(0, totalFrames):
             try:
                 #sys.stdout.write("\n\n\n\n")
-                sys.stdout.write("\r" + asciiImages[frame])
+                sys.stdout.write("\r" + asciiImages[frame + 100])
                 sys.stdout.flush()
 
             except Exception as error:
@@ -115,8 +122,7 @@ def main():
 
         pixels = img.getdata()
 
-        newPixels = [asciiChars[pixel // 25] for pixel in pixels]
-        newPixels = "".join(newPixels)
+        newPixels = "".join([asciiChars[pixel // 25] for pixel in pixels])
         pixelsLen = len(newPixels)
 
         asciiImage = [newPixels[index:(index + newSizes.Width)] for index in range(0, pixelsLen, newSizes.Width)]
