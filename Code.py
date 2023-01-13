@@ -17,19 +17,19 @@ cap = None
 
 def main():
     os.system("title Bad apple")
-    
+
     sys.stdout.write("--------------\n")
     sys.stdout.write("Start\n")
     sys.stdout.write("--------------\n")
 
     def getSize():
-        sizes = [m for m in screeninfo.get_monitors()]
+        screenSizes = [m for m in screeninfo.get_monitors()]
         monitor = 1
 
-        if len(sizes) > 1:
-            monitor = input("> Monitor (1 - {}) : ".format(len(sizes)))
+        if len(screenSizes) > 1:
+            monitor = input("> Monitor (1 - {}) : ".format(len(screenSizes)))
         
-        return math.floor(sizes[(int(monitor) - 1)].height / 5.5), math.floor(sizes[(int(monitor) - 1)].width / 10)
+        return math.floor(screenSizes[(int(monitor) - 1)].height / 5.5), math.floor(screenSizes[(int(monitor) - 1)].width / 10)
     
     askSize = input("> Use screen sizes? (Y / N) : ")
 
@@ -48,13 +48,13 @@ def main():
         print("Starting...")
         os.system("cls")
 
-        timer = fpstimer.FPSTimer(10)
+        timer = fpstimer.FPSTimer(30)
         loadMusic("Song.mp3")
 
         for frame in range(0, totalFrames):
             try:
                 #sys.stdout.write("\n\n\n\n")
-                sys.stdout.write("\r" + asciiImages[frame + 100])
+                sys.stdout.write("\r" + asciiImages[frame])
                 sys.stdout.flush()
 
             except Exception as error:
