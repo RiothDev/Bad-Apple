@@ -15,16 +15,9 @@ frameCount = 1
 
 cap = None
 
-def showException(exc_type, exc_value, tb):
-    traceback.print_exc(exc_type, exc_value, tb)
-    input("")
-    sys.exit(-1)
-
-sys.excepthook = showException
-
 def main():
     os.system("title Bad apple")
-
+    
     sys.stdout.write("--------------\n")
     sys.stdout.write("Start\n")
     sys.stdout.write("--------------\n")
@@ -133,4 +126,9 @@ def main():
     loadVideo("Video.mp4")
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as error:
+        print(traceback.format_exc())
+        input("")
+        sys.exit(-1)
