@@ -1,10 +1,26 @@
-import os, cv2, fpstimer, sys, screeninfo, math, sys, traceback
+import os, cv2, fpstimer, sys, screeninfo, math, sys, traceback, colorama
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
+
 import pygame
 from PIL import Image
 
 ASCII_CHARS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", ".", ","]
 ASCII_IMAGES = []
+TITLE = """
+██████╗░░█████╗░██████╗░  ░█████╗░██████╗░██████╗░██╗░░░░░███████╗  ██████╗░██╗░░░██╗
+██╔══██╗██╔══██╗██╔══██╗  ██╔══██╗██╔══██╗██╔══██╗██║░░░░░██╔════╝  ██╔══██╗╚██╗░██╔╝
+██████╦╝███████║██║░░██║  ███████║██████╔╝██████╔╝██║░░░░░█████╗░░  ██████╦╝░╚████╔╝░
+██╔══██╗██╔══██║██║░░██║  ██╔══██║██╔═══╝░██╔═══╝░██║░░░░░██╔══╝░░  ██╔══██╗░░╚██╔╝░░
+██████╦╝██║░░██║██████╔╝  ██║░░██║██║░░░░░██║░░░░░███████╗███████╗  ██████╦╝░░░██║░░░
+╚═════╝░╚═╝░░╚═╝╚═════╝░  ╚═╝░░╚═╝╚═╝░░░░░╚═╝░░░░░╚══════╝╚══════╝  ╚═════╝░░░░╚═╝░░░
+
+██████╗░██╗░█████╗░████████╗██╗░░██╗██████╗░███████╗██╗░░░██╗
+██╔══██╗██║██╔══██╗╚══██╔══╝██║░░██║██╔══██╗██╔════╝██║░░░██║
+██████╔╝██║██║░░██║░░░██║░░░███████║██║░░██║█████╗░░╚██╗░██╔╝
+██╔══██╗██║██║░░██║░░░██║░░░██╔══██║██║░░██║██╔══╝░░░╚████╔╝░
+██║░░██║██║╚█████╔╝░░░██║░░░██║░░██║██████╔╝███████╗░░╚██╔╝░░
+╚═╝░░╚═╝╚═╝░╚════╝░░░░╚═╝░░░╚═╝░░╚═╝╚═════╝░╚══════╝░░░╚═╝░░░
+"""
 
 class sizes:
     def __init__(self, width, height):
@@ -18,40 +34,37 @@ cap = None
 def main():
     os.system("title Bad apple")
 
-    sys.stdout.write("--------------\n")
-    sys.stdout.write("Start\n")
-    sys.stdout.write("--------------\n")
+    print(colorama.Fore.CYAN + TITLE + colorama.Fore.RESET)
 
-    def get_size():
+    def get_size() -> int:
         screen_sizes = [m for m in screeninfo.get_monitors()]
         monitor = 1
 
-        if len(screen_sizes) > 1:
-            monitor = input("> Monitor (1 - {}) : ".format(len(screen_sizes)))
+        if len(screen_sizes) > 1: monitor = input(colorama.Fore.BLUE + "> Monitor (1 - {}) : ".format(len(screen_sizes)) + colorama.Fore.CYAN)
         
         return math.floor(screen_sizes[(int(monitor) - 1)].height / 5.5), math.floor(screen_sizes[(int(monitor) - 1)].width / 10)
     
-    ask_size = input("> Use screen sizes? (Y / N) : ")
+    ask_size = input(colorama.Fore.BLUE + "> Use screen sizes? (Y / N) : " + colorama.Fore.CYAN)
 
     if ask_size.lower() == "y":
-        monitor_height, monitor_width = get_size()
-    else:
-        monitor_height, monitor_width = int(input("> Height (190) : ")), int(input("> Width (160) : "))
+        monitor_height, monitor_width = get_size() 
+    else: 
+        monitor_height, monitor_width = int(input(colorama.Fore.BLUE + "> Height (190) : " + colorama.Fore.CYAN)), int(input(colorama.Fore.BLUE + "> Width (160) : " + colorama.Fore.CYAN))
 
-    def play_music(song):
+    def play_music(song) -> None:
         pygame.mixer.init()
         pygame.mixer.music.load(f"Assets/{song}")
         pygame.mixer.music.set_volume(1)
         pygame.mixer.music.play()
 
-    def play_video(totalFrames):
-        print("Starting...")
+    def play_video(total_frames) -> None:
+        print(colorama.Fore.YELLOW + "Starting..." + colorama.Fore.RESET)
         os.system("cls")
 
         timer = fpstimer.FPSTimer(30)
         play_music("Song.mp3")
 
-        for frame in range(0, totalFrames):
+        for frame in range(0, total_frames):
             try:
                 #sys.stdout.write("\n\n\n\n")
                 sys.stdout.write("\r" + ASCII_IMAGES[frame])
@@ -62,15 +75,15 @@ def main():
 
             timer.sleep()
     
-    def load_frames(totalFrames):
+    def load_frames(total_frames) -> None:
         global frame_count
         global ASCII_IMAGES
         global cap
 
-        print("Loading frames...")
+        print(colorama.Fore.YELLOW + "Loading frames..." + colorama.Fore.RESET)
         r, frm = cap.read()
 
-        while r and frame_count <= totalFrames:
+        while r and frame_count <= total_frames:
             r, frm = cap.read()
             frame_count += 1
 
@@ -85,21 +98,21 @@ def main():
         cap.release()
         play_video(frame_count)
     
-    def get_frames(path):
+    def get_frames(path) -> None:
         check_cap = cv2.VideoCapture(path)
-        totalFrames = int(check_cap.get(cv2.CAP_PROP_FRAME_COUNT))
+        total_frames = int(check_cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
         check_cap.release()
 
-        fpp = totalFrames - 1
+        fpp = total_frames - 1
         load_frames(fpp)
 
-    def load_video(vid):
+    def load_video(vid) -> None:
         global cap
         cap = cv2.VideoCapture(f"Assets/{vid}")
         get_frames(f"Assets/{vid}")
 
-    def transform(img):
+    def transform(img) -> str:
         global main_sizes
 
         old_width, old_height = img.size
@@ -132,4 +145,3 @@ if __name__ == "__main__":
         print(traceback.format_exc())
         input("")
         sys.exit(-1)
-
